@@ -1,0 +1,113 @@
+Required outside libraries:
+    Adafruit_Sensor: https://github.com/adafruit/Adafruit_Sensor
+    DHT-sensor-library: https://github.com/adafruit/DHT-sensor-library
+    Arduino-LiquidCrystal-I2C-library: https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library
+
+
+LCD Address{
+    A0  A1  A2  Hex Address
+    1   1   1   0x27
+    0   1   1   0x26
+    1   0   1   0x25
+    0   0   1   0x24
+    1   1   0   0x23
+    0   1   0   0x22
+    1   0   0   0x21
+    0   0   0   0x20
+}
+
+Define pins{
+    DIP switch{
+        define pin of DIP switch 1
+        define pin of DIP switch 2
+        define pin of DIP switch 3
+    }
+
+    LCD(I2C LCD){
+        define pin of SDA
+        define pin of SCL
+    }
+
+    Servomotors 1{
+        define pin of PWM
+    }
+
+    Servomotors 2{
+        define pin of PWM
+    }
+
+    Joystick{
+        define pin of horizontal
+        define pin of vertical
+    }
+
+    Infrared sensor{
+        define pin of right
+        define pin of center
+        define pin of left
+    }
+
+    Ultrasonic sensor{
+        define pin of trigger
+        define pin of echo
+    }
+
+    Temperature and humidity sensor{
+        define pin of data
+    }
+}
+
+
+Initializing{
+    Setup all pins
+    Initialize system
+}
+
+always{
+    status = Get DIP switch status(Priority: 1>2>3, All close: 0)
+
+    switch(status){
+        case 0:
+            Default status:
+                Show default message
+            break;
+        case 1:
+            Control two Servomotors to rotate.
+            Show the angle on LCD.
+            break;
+        case 2:
+            Infrared sensor walking correction.
+
+            switch (Position) {
+                case 1:
+                    Normal
+                    break;
+                case 2:
+                    Slightly Right
+                    break;
+                case 3:
+                    Right
+                    break;
+                case 4:
+                    Slightly Left
+                    break;
+                case 5:
+                    Left
+                    break;
+                default:
+                    Abnormal
+                    break;
+            }
+
+            Show the status on LCD.
+            break;
+        case 3:
+            Sensing distance by ultrasonic sensor.
+            Sensing temperature and humidity by temperature and humidity sensor.
+            Show all data on LCD.
+            break;
+        default:
+            Show error message on LCD.
+            break;
+    }
+}
